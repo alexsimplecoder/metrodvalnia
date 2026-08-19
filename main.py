@@ -1,5 +1,5 @@
 import pygame
-from scripts import settings, utils, animation
+from scripts import settings, utils, animation, player
 
 pygame.init()
 
@@ -8,9 +8,9 @@ info = pygame.display.Info()
 screen_width = info.current_w
 screen_height = info.current_h
 
-anim = animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_attack_anim_strip_4(new).png", 5, 4)
-
 screen = pygame.display.set_mode((screen_width, screen_height))
+
+main_player = player.Player((50, 50))
 clock = pygame.time.Clock()
 while True:
     clock.tick(settings.FPS)
@@ -21,6 +21,6 @@ while True:
             if i.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
-    anim.render(screen, (50, 50))
-    anim.update()
+    main_player.render(screen)
+    main_player.update()
     pygame.display.update()
