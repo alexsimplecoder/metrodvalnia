@@ -1,5 +1,5 @@
 import pygame
-from scripts import settings, utils, animation, player
+from scripts import settings, player, keybinding
 
 pygame.init()
 
@@ -10,7 +10,7 @@ screen_height = info.current_h
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 
-main_player = player.Player((50, 50))
+main_player = player.Player((500, 500))
 clock = pygame.time.Clock()
 while True:
     clock.tick(settings.FPS)
@@ -21,6 +21,16 @@ while True:
             if i.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
+            if i.key == keybinding.left:
+                main_player.ml = True
+            if i.key == keybinding.right:
+                main_player.mr = True
+        if i.type == pygame.KEYUP:
+            if i.key == keybinding.left:
+                main_player.ml = False
+            if i.key == keybinding.right:
+                main_player.mr = False
+
     main_player.render(screen)
     main_player.update()
     pygame.display.update()
