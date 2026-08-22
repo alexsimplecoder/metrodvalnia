@@ -1,5 +1,5 @@
 import pygame
-from scripts import settings, player, keybinding
+from scripts import settings, player, keybinding, level
 
 pygame.init()
 
@@ -9,6 +9,8 @@ screen_width = info.current_w
 screen_height = info.current_h
 
 screen = pygame.display.set_mode((screen_width, screen_height))
+
+level.load_level()
 
 main_player = player.Player((500, 500))
 clock = pygame.time.Clock()
@@ -30,7 +32,7 @@ while True:
                 main_player.ml = False
             if i.key == keybinding.right:
                 main_player.mr = False
-
+    level.render(screen)
     main_player.render(screen)
     main_player.update()
     pygame.display.update()
