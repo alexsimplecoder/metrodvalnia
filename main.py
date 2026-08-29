@@ -27,6 +27,10 @@ while True:
                 main_player.ml = True
             if i.key == keybinding.right:
                 main_player.mr = True
+            if i.key == keybinding.jump:
+                if main_player.jumps_left > 0:
+                    main_player.vy = -7
+                    main_player.jumps_left -= 1
         if i.type == pygame.KEYUP:
             if i.key == keybinding.left:
                 main_player.ml = False
