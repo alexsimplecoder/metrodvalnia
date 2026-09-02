@@ -1,5 +1,5 @@
 import pygame
-from scripts import animation, settings, level
+from scripts import animation, settings, level, particle
 
 pygame.init()
 
@@ -13,7 +13,6 @@ class Player:
             "jump up": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_jump_up_anim_strip_3.png", settings.scale, 3, 0.08),
             "jump down": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_jump_down_anim_strip_3.png", settings.scale, 3, 0.08),
             "double jump": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_jump_double_anim_strip_3.png", settings.scale, 3, 0.08)
-            
         }
         self.w = self.anims["idle"].images[0].get_width()
         self.h = self.anims["idle"].images[0].get_height()
@@ -22,7 +21,8 @@ class Player:
         self.mr = False
         self.ml = False
         self.vy = 0
-        self.jumps_left = 2
+        self.max_jumps = 2
+        self.jumps_left = self.max_jumps
         self.time_in_the_air = 0
 
     def render(self, screen:pygame.Surface):
@@ -53,6 +53,8 @@ class Player:
             self.time_in_the_air += 1
             if self.time_in_the_air > 5:
                 self.state = "jump down"
+        if self.max_jumps == 2 and self.jumps_left == 0:
+            self.state = "double jump"
         self.vy += settings.gravity
         self.y += self.vy
         self.collision_y()
@@ -76,11 +78,15 @@ class Player:
         for i in player_tiles:
             if hitbox.colliderect(i):
                 if self.vy >= 0:
+                    # when falling
                     hitbox.bottom = i.top
                     self.vy = 0
-                    self.jumps_left = 2
+                    self.jumps_left = self.max_jumps
+                    if self.time_in_the_air > 5:
+                        particle.dust_particles.append(particle.After_Jump_Dust((self.get_hitbox().left - 12, self.get_hitbox().centery - 25)))
                     self.time_in_the_air = 0
                 else:
+                    # hitting from the bottom
                     hitbox.top = i.bottom
                     self.vy = 0
         self.y = hitbox.top - 4

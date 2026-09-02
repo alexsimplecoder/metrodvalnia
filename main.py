@@ -1,5 +1,5 @@
 import pygame
-from scripts import settings, player, keybinding, level
+from scripts import settings, player, keybinding, level, particle
 
 pygame.init()
 
@@ -31,6 +31,8 @@ while True:
                 if main_player.jumps_left > 0:
                     main_player.vy = -7
                     main_player.jumps_left -= 1
+                    if main_player.time_in_the_air < 5:
+                        particle.dust_particles.append(particle.Before_Jump_Dust((main_player.get_hitbox().left - 12, main_player.get_hitbox().centery - 25)))
         if i.type == pygame.KEYUP:
             if i.key == keybinding.left:
                 main_player.ml = False
@@ -39,4 +41,9 @@ while True:
     level.render(screen)
     main_player.render(screen)
     main_player.update()
+    for dust in particle.dust_particles:
+        dust.render(screen)
+        dust.update()
+        if dust.anim.finished:
+            particle.dust_particles.remove(dust)
     pygame.display.update()
