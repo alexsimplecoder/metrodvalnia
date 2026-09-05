@@ -10,8 +10,8 @@ map = None
 
 def render(screen:pygame.Surface):
     screen.blit(world, (0, 0))
-    for i in hard_blocks.values():
-        pygame.draw.rect(screen, (255, 0, 0), i, 1)
+    # for i in hard_blocks.values():
+    #     pygame.draw.rect(screen, (255, 0, 0), i, 1)
 
 def load_level():
     global world, map

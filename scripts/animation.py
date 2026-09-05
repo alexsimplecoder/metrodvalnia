@@ -31,3 +31,8 @@ class Animation:
                     self.finished = True
             self.time = 0
         self.time += 1
+
+    def reset(self):
+        self.index = 0
+        self.time = 0
+        self.finished = False

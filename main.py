@@ -33,6 +33,8 @@ while True:
                     main_player.jumps_left -= 1
                     if main_player.time_in_the_air < 5:
                         particle.dust_particles.append(particle.Before_Jump_Dust((main_player.get_hitbox().left - 12, main_player.get_hitbox().centery - 25)))
+            if i.key == keybinding.attack:
+                main_player.state = "attack"
         if i.type == pygame.KEYUP:
             if i.key == keybinding.left:
                 main_player.ml = False
