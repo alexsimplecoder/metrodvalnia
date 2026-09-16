@@ -2,6 +2,8 @@ import pygame
 import pytmx
 from scripts import utils, settings
 
+pygame.init()
+
 hard_blocks:dict[tuple[int, int], pygame.Rect] = {
 
 }

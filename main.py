@@ -1,5 +1,5 @@
 import pygame
-from scripts import settings, player, keybinding, level, particle
+from scripts import settings, player, keybinding, level, particle, enemies
 
 pygame.init()
 
@@ -13,6 +13,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 level.load_level()
 
 main_player = player.Player((500, 500))
+enemies.load_enemies()
 clock = pygame.time.Clock()
 while True:
     clock.tick(settings.FPS)
@@ -28,11 +29,7 @@ while True:
             if i.key == keybinding.right:
                 main_player.mr = True
             if i.key == keybinding.jump:
-                if main_player.jumps_left > 0:
-                    main_player.vy = -7
-                    main_player.jumps_left -= 1
-                    if main_player.time_in_the_air < 5:
-                        particle.dust_particles.append(particle.Before_Jump_Dust((main_player.get_hitbox().left - 12, main_player.get_hitbox().centery - 25)))
+                main_player.jump()
             if i.key == keybinding.attack:
                 main_player.state = "attack"
         if i.type == pygame.KEYUP:
@@ -41,11 +38,14 @@ while True:
             if i.key == keybinding.right:
                 main_player.mr = False
     level.render(screen)
-    main_player.render(screen)
-    main_player.update()
     for dust in particle.dust_particles:
         dust.render(screen)
         dust.update()
         if dust.anim.finished:
             particle.dust_particles.remove(dust)
+    for enemy in enemies.enemies:
+        enemy.render(screen)
+        enemy.update()
+    main_player.render(screen)
+    main_player.update()
     pygame.display.update()

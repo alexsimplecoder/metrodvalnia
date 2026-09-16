@@ -1,6 +1,8 @@
 import pygame
 from scripts import utils, settings
 
+pygame.init()
+
 class Animation:
     def __init__(self, path:str, scale:float, image_num:int, anim_speed_insec:float, repeatable:bool = True):
         self.images = utils.load_images(path, scale, image_num)

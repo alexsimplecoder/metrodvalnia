@@ -2,6 +2,7 @@ import pygame
 
 from scripts import animation, settings
 
+pygame.init()
 
 class Before_Jump_Dust:
     def __init__(self, coords):
