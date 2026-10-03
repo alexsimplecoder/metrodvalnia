@@ -13,12 +13,13 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
             "walk" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_run_anim_strip_6.png", settings.scale, 6, 1),
             "idle" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_idle_anim_strip_4.png", settings.scale, 4, 1),
             "attack" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_attack_anim_strip_4.png", settings.scale, 4, 1, False),
-            "hit" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_hit_anim_strip_3.png", settings.scale, 3, 1, False),
+            "hit" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_hit_anim_strip_3.png", settings.scale, 3, 0.1),
             "death" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_death_anim_strip_6.png", settings.scale, 6, 1, False),
             "jump down": animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_idle_anim_strip_4.png", settings.scale, 4, 1)
         }
         self.damage = 30
         self.timer = random.randint(settings.FPS * 2, settings.FPS * 3)
+        self.hit_timer = 0
         self.random_movement = 1
         self.took_damage = False
         
@@ -41,6 +42,10 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
         else:
             self.normal_update()
         self.ai()
+        if self.hit_timer:
+            self.state = "hit"
+            self.hit_timer -= 1
+
         if self.health == 0:
             enemies.remove(self)
 
@@ -72,6 +77,7 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
 
     def damaged(self, damage):
         self.health -= damage
+        self.hit_timer = int(self.anims["hit"].speed * len(self.anims["hit"].rimages) * settings.FPS)
         if self.health < 0:
             self.health = 0
 

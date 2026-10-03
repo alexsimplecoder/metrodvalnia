@@ -29,7 +29,8 @@ class Player(entity.Physics_Entity, Damagable):
             self.anims[self.state].render(screen, (self.x, self.y), self.dir)
         hitbox = self.get_hitbox()
         attack_hitbox = self.get_attack_hitbox()
-        pygame.draw.rect(screen, (255, 0, 0), attack_hitbox, 2)
+        # pygame.draw.rect(screen, (255, 0, 0), hitbox, 2)
+        # pygame.draw.rect(screen, (255, 0, 0), attack_hitbox, 2)
         self.render_hp(screen, (20, 28))
 
     def calibration_x(self, hitbox):
