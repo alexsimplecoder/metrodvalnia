@@ -1,11 +1,13 @@
 import pygame, random, pytmx
 from scripts import animation, settings, entity
+from interfaces import damageable
 
 pygame.init()
 
-class Goblin(entity.Physics_Entity):
+class Goblin(entity.Physics_Entity, damageable.Damagable):
     def __init__(self, coords):
-        super().__init__(coords, 4, 3)
+        entity.Physics_Entity.__init__(self, coords, 3, 7)
+        damageable.Damagable.__init__(self, 100, 1.7)
         self.x, self.y = coords
         self.anims = {
             "walk" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_run_anim_strip_6.png", settings.scale, 6, 1),
@@ -16,13 +18,15 @@ class Goblin(entity.Physics_Entity):
             "jump down": animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_idle_anim_strip_4.png", settings.scale, 4, 1)
         }
         self.damage = 30
-        self.health = 100
         self.timer = random.randint(settings.FPS * 2, settings.FPS * 3)
         self.random_movement = 1
-
+        self.took_damage = False
+        
     def render(self, screen:pygame.Surface):
         self.anims[self.state].render(screen, (self.x, self.y), self.dir)
         # pygame.draw.rect(screen, (255, 30, 160), self.get_hitbox(), 1)
+        if self.health < self.max_health:
+            damageable.Damagable.render_hp(self, screen, (self.x, self.y - 30))
 
     def normal_update(self):
         super().update()
@@ -37,6 +41,8 @@ class Goblin(entity.Physics_Entity):
         else:
             self.normal_update()
         self.ai()
+        if self.health == 0:
+            enemies.remove(self)
 
     def get_hitbox(self):
         image = self.anims[self.state].images[0]
@@ -51,7 +57,7 @@ class Goblin(entity.Physics_Entity):
 
     def ai(self):
         if self.timer == 0:
-            self.random_movement = random.randint(1, 3)
+            self.random_movement = random.choices([1, 2, 3], [48, 26, 26])[0]
             self.timer = random.randint(settings.FPS, int(settings.FPS * 1.5))
         if self.random_movement == 1:
             self.mr = False
@@ -63,6 +69,11 @@ class Goblin(entity.Physics_Entity):
             self.mr = False
             self.ml = True
         self.timer -= 1
+
+    def damaged(self, damage):
+        self.health -= damage
+        if self.health < 0:
+            self.health = 0
 
 enemies:list[Goblin] = []
 

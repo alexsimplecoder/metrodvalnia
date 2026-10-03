@@ -4,7 +4,9 @@
     ],
     "fileStates": {
         "enemies.tsx": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "tileset_32x32(new).tsx": {
             "scaleInDock": 1,
@@ -12,10 +14,10 @@
         },
         "world.tmx": {
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 519.3333333333333,
-                "y": 289.6666666666667
+                "x": 605.3333333333333,
+                "y": 437.6666666666667
             }
         }
     },
@@ -23,10 +25,12 @@
     "map.lastUsedFormat": "tmx",
     "openFiles": [
         "world.tmx",
-        "tileset_32x32(new).tsx"
+        "tileset_32x32(new).tsx",
+        "enemies.tsx"
     ],
     "project": "metroidvania.tiled-project",
     "recentFiles": [
+        "enemies.tsx",
         "tileset_32x32(new).tsx",
         "world.tmx"
     ],

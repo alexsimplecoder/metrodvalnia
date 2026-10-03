@@ -31,7 +31,11 @@ while True:
             if i.key == keybinding.jump:
                 main_player.jump()
             if i.key == keybinding.attack:
-                main_player.state = "attack"
+                if main_player.state != "attack":
+                    for enemy in enemies.enemies:
+                        enemy.took_damage = False
+                    main_player.attack_timer = 0
+                    main_player.state = "attack"
         if i.type == pygame.KEYUP:
             if i.key == keybinding.left:
                 main_player.ml = False
