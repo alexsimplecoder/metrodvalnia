@@ -14,7 +14,7 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
             "idle" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_idle_anim_strip_4.png", settings.scale, 4, 1),
             "attack" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_attack_anim_strip_4.png", settings.scale, 4, 1, False),
             "hit" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_hit_anim_strip_3.png", settings.scale, 3, 0.1),
-            "death" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_death_anim_strip_6.png", settings.scale, 6, 1, False),
+            "death" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_death_anim_strip_6.png", settings.scale, 6, 0.1, False),
             "jump down": animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_idle_anim_strip_4.png", settings.scale, 4, 1)
         }
         self.damage = 30
@@ -22,6 +22,8 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
         self.hit_timer = 0
         self.random_movement = 1
         self.took_damage = False
+        self.death_timer = int(settings.FPS * self.anims["death"].speed * len(self.anims["death"].rimages))
+        print(self.anims["death"].speed)
         
     def render(self, screen:pygame.Surface):
         self.anims[self.state].render(screen, (self.x, self.y), self.dir)
@@ -45,10 +47,14 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
         if self.hit_timer:
             self.state = "hit"
             self.hit_timer -= 1
-
-        if self.health == 0:
+        if self.health <= 0:
+            self.state = "death"
+            self.ml = False
+            self.mr = False
+            self.death_timer -= 1
+        if self.death_timer == 0:
             enemies.remove(self)
-
+        
     def get_hitbox(self):
         image = self.anims[self.state].images[0]
         hitbox = pygame.Rect(self.x, self.y, image.get_width(), image.get_height()).inflate(-30, 0)
