@@ -12,7 +12,7 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
         self.anims = {
             "walk" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_run_anim_strip_6.png", settings.scale, 6, 1),
             "idle" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_idle_anim_strip_4.png", settings.scale, 4, 1),
-            "attack" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_attack_anim_strip_4.png", settings.scale, 4, 1, False),
+            "attack" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_attack_anim_strip_4.png", settings.scale, 4, 0.1),
             "hit" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_hit_anim_strip_3.png", settings.scale, 3, 0.1),
             "death" : animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_death_anim_strip_6.png", settings.scale, 6, 0.1, False),
             "jump down": animation.Animation("assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin/goblin_idle_anim_strip_4.png", settings.scale, 4, 1)
@@ -23,23 +23,24 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
         self.random_movement = 1
         self.took_damage = False
         self.death_timer = int(settings.FPS * self.anims["death"].speed * len(self.anims["death"].rimages))
-        print(self.anims["death"].speed)
         
     def render(self, screen:pygame.Surface):
         self.anims[self.state].render(screen, (self.x, self.y), self.dir)
         # pygame.draw.rect(screen, (255, 30, 160), self.get_hitbox(), 1)
         if self.health < self.max_health:
             damageable.Damagable.render_hp(self, screen, (self.x, self.y - 30))
+        pygame.draw.rect(screen, (255, 0, 0), self.get_attack_hitbox(), 2)
 
     def normal_update(self):
         super().update()
 
     def attack_update(self):
-        pass
+        self.state = "attack"
+        
 
-    def update(self):
+    def update(self, main_player):
         self.anims[self.state].update()
-        if self.state == "attack":
+        if self.get_attack_hitbox().colliderect(main_player.get_hitbox()):
             self.attack_update()
         else:
             self.normal_update()
@@ -86,6 +87,13 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
         self.hit_timer = int(self.anims["hit"].speed * len(self.anims["hit"].rimages) * settings.FPS)
         if self.health < 0:
             self.health = 0
+
+    def get_attack_hitbox(self):
+        if self.dir == "right":
+            attack_hitbox = pygame.Rect(self.x + self.anims["idle"].images[0].get_width(), self.y, self.anims["attack"].images[0].get_width() - self.anims["idle"].images[0].get_width(), 100)
+        else:
+            attack_hitbox = pygame.Rect(self.x - self.anims["attack"].images[0].get_width() + self.anims["idle"].images[0].get_width() + 20, self.y, self.anims["attack"].images[0].get_width() - self.anims["idle"].images[0].get_width(), 100)
+        return attack_hitbox
 
 enemies:list[Goblin] = []
 

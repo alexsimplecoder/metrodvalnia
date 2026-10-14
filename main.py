@@ -49,7 +49,7 @@ while True:
             particle.dust_particles.remove(dust)
     for enemy in enemies.enemies:
         enemy.render(screen)
-        enemy.update()
+        enemy.update(main_player)
     main_player.render(screen)
     main_player.update()
     pygame.display.update()
