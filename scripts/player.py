@@ -14,11 +14,13 @@ class Player(entity.Physics_Entity, Damagable):
             "jump up": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_jump_up_anim_strip_3.png", settings.scale, 3, 0.08),
             "jump down": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_jump_down_anim_strip_3.png", settings.scale, 3, 0.08),
             "double jump": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_jump_double_anim_strip_3.png", settings.scale, 3, 0.08),
-            "attack": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_sword_attack_anim_strip_4.png", settings.scale, 4, 0.08, repeatable=False)
+            "attack": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_sword_attack_anim_strip_4.png", settings.scale, 4, 0.08, repeatable=False),
+            "hit": animation.Animation("assets/platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_hit_anim_strip_3.png", settings.scale, 3, 0.2)
         }
         self.w = self.anims["idle"].images[0].get_width()
         self.h = self.anims["idle"].images[0].get_height()
         self.damage = 30
+        self.hit_timer = 0
 
     def render(self, screen:pygame.Surface):
         if self.state != "attack":
@@ -73,9 +75,18 @@ class Player(entity.Physics_Entity, Damagable):
             self.attack_update()
         else:
             self.normal_update()
+        if self.hit_timer:
+            self.state = "hit"
+            self.hit_timer -= 1
 
     def get_hitbox(self):
         return pygame.Rect(self.x, self.y, self.w, self.h).inflate(-38, -8)
 
     def get_attack_hitbox(self):
         return pygame.Rect(self.x + self.anims["idle"].images[0].get_width() if self.dir == "right" else self.x - self.anims["idle"].images[0].get_width(), self.y, (self.anims["attack"].images[0].get_width())/2, self.anims["idle"].images[0].get_height())
+
+    def damaged(self, damage):
+        self.health -= damage
+        self.hit_timer = int(self.anims["hit"].speed * len(self.anims["hit"].rimages) * settings.FPS)
+        if self.health < 0:
+            self.health = 0 

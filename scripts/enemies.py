@@ -34,14 +34,16 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
     def normal_update(self):
         super().update()
 
-    def attack_update(self):
+    def attack_update(self, main_player):
         self.state = "attack"
+        if main_player.state != "hit":
+            main_player.damaged(self.damage)
         
 
     def update(self, main_player):
         self.anims[self.state].update()
         if self.get_attack_hitbox().colliderect(main_player.get_hitbox()):
-            self.attack_update()
+            self.attack_update(main_player)
         else:
             self.normal_update()
         self.ai()
