@@ -1,6 +1,6 @@
 import pygame
 import pytmx
-from scripts import utils, settings
+from scripts import utils, settings, camera
 
 pygame.init()
 
@@ -11,7 +11,7 @@ world = None
 map = None
 
 def render(screen:pygame.Surface):
-    screen.blit(world, (0, 0))
+    screen.blit(world, (0 - camera.camerax, 0 - camera.cameray))
     # for i in hard_blocks.values():
     #     pygame.draw.rect(screen, (255, 0, 0), i, 1)
 

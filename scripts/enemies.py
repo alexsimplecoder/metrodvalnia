@@ -1,5 +1,5 @@
 import pygame, random, pytmx
-from scripts import animation, settings, entity
+from scripts import animation, settings, entity, camera
 from interfaces import damageable
 
 pygame.init()
@@ -25,11 +25,11 @@ class Goblin(entity.Physics_Entity, damageable.Damagable):
         self.death_timer = int(settings.FPS * self.anims["death"].speed * len(self.anims["death"].rimages))
         
     def render(self, screen:pygame.Surface):
-        self.anims[self.state].render(screen, (self.x, self.y), self.dir)
+        self.anims[self.state].render(screen, (self.x - camera.camerax, self.y - camera.cameray), self.dir)
         # pygame.draw.rect(screen, (255, 30, 160), self.get_hitbox(), 1)
         if self.health < self.max_health:
-            damageable.Damagable.render_hp(self, screen, (self.x, self.y - 30))
-        pygame.draw.rect(screen, (255, 0, 0), self.get_attack_hitbox(), 2)
+            damageable.Damagable.render_hp(self, screen, (self.x - camera.camerax, self.y - 30 - camera.cameray))
+        # pygame.draw.rect(screen, (255, 0, 0), self.get_attack_hitbox(), 2)
 
     def normal_update(self):
         super().update()

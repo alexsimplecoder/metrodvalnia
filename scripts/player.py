@@ -1,5 +1,5 @@
 import pygame
-from scripts import animation, settings, level, particle, entity, image_loader, enemies
+from scripts import animation, settings, level, particle, entity, image_loader, enemies, camera, fonts
 from interfaces.damageable import Damagable
 
 pygame.init()
@@ -21,16 +21,19 @@ class Player(entity.Physics_Entity, Damagable):
         self.h = self.anims["idle"].images[0].get_height()
         self.damage = 30
         self.hit_timer = 0
+        self.coins = 0
 
     def render(self, screen:pygame.Surface):
         if self.state != "attack":
-            self.anims[self.state].render(screen, (self.x, self.y), self.dir)
+            self.anims[self.state].render(screen, (self.x - camera.camerax, self.y - camera.cameray), self.dir)
         elif self.dir == "left":
-            self.anims[self.state].render(screen, (self.x - 80, self.y), self.dir)
+            self.anims[self.state].render(screen, (self.x - 80 - camera.camerax, self.y - camera.cameray), self.dir)
         else:
-            self.anims[self.state].render(screen, (self.x, self.y), self.dir)
+            self.anims[self.state].render(screen, (self.x - camera.camerax, self.y - camera.cameray), self.dir)
         hitbox = self.get_hitbox()
         attack_hitbox = self.get_attack_hitbox()
+        text_image = fonts.font60.render(f"coins: {self.coins}", False, (255, 255, 0))
+        screen.blit(text_image, (settings.screen_w - 10 - text_image.get_width(), 10))
         # pygame.draw.rect(screen, (255, 0, 0), hitbox, 2)
         # pygame.draw.rect(screen, (255, 0, 0), attack_hitbox, 2)
         self.render_hp(screen, (20, 28))
@@ -72,7 +75,7 @@ class Player(entity.Physics_Entity, Damagable):
     def update(self):
         self.anims[self.state].update()
         if self.state == "attack":
-            self.attack_update()
+            self.attack_update() 
         else:
             self.normal_update()
         if self.hit_timer:
@@ -89,4 +92,4 @@ class Player(entity.Physics_Entity, Damagable):
         self.health -= damage
         self.hit_timer = int(self.anims["hit"].speed * len(self.anims["hit"].rimages) * settings.FPS)
         if self.health < 0:
-            self.health = 0 
+            self.health = 0

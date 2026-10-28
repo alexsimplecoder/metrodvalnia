@@ -1,5 +1,5 @@
-import pygame
-from scripts import animation, settings
+import pygame, pytmx
+from scripts import animation, settings, camera
 
 pygame.init()
 
@@ -14,7 +14,24 @@ class Coin:
         self.state = "spinning"
 
     def render(self, screen):
-        self.anims[self.state].render(screen, (self.x, self.y))
+        self.anims[self.state].render(screen, (self.x - camera.camerax, self.y - camera.cameray if self.state == "spinning" else self.y - camera.cameray - self.anims["spinning"].images[0].get_height()), "right")
+        # pygame.draw.rect(screen, (255, 0, 0), self.get_hitbox().move(-camera.camerax, -camera.cameray), 2)
 
-    def update(self):
+    def update(self, player):
         self.anims[self.state].update()
+        if self.state == "collected":
+            if self.anims[self.state].finished:
+                items.remove(self)
+                player.coins += 1
+
+    def get_hitbox(self):
+        hitbox = pygame.Rect(self.x, self.y, self.anims[self.state].images[0].get_width(), self.anims[self.state].images[0].get_height())
+        return hitbox
+
+items = []
+
+def load_items():
+    world = pytmx.load_pygame("tiled/world.tmx")
+    for (xt, yt, tile_id) in world.get_layer_by_name("coins"):
+        if tile_id != 0:
+            items.append(Coin((xt * settings.tile_size, yt * settings.tile_size)))

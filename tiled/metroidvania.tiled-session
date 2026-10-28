@@ -3,25 +3,30 @@
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "coins.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 4
+        },
         "enemies.tsx": {
             "dynamicWrapping": true,
-            "scaleInDock": 1,
+            "scaleInDock": 4,
             "scaleInEditor": 1
         },
         "tileset_32x32(new).tsx": {
-            "scaleInDock": 1,
+            "dynamicWrapping": false,
+            "scaleInDock": 4,
             "scaleInEditor": 1
         },
         "world.tmx": {
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 605.3333333333333,
-                "y": 437.6666666666667
+                "x": 1442,
+                "y": 578.5
             }
         }
     },
-    "last.imagePath": "C:/Users/Admin/OneDrive/Desktop/metroidvania/assets/platformer_metroidvania asset pack v1.01/enemies sprites/goblin",
+    "last.imagePath": "C:/Users/Admin/OneDrive/Desktop/metroidvania/assets/platformer_metroidvania asset pack v1.01/hud elements",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
         "world.tmx",
@@ -36,7 +41,7 @@
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 9,
+        "width": 9
     }
 }

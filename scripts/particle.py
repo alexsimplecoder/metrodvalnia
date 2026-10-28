@@ -1,6 +1,6 @@
 import pygame
 
-from scripts import animation, settings
+from scripts import animation, settings, camera
 
 pygame.init()
 
@@ -17,7 +17,7 @@ class Before_Jump_Dust:
         )
 
     def render(self, screen:pygame.Surface):
-        self.anim.render(screen, (self.x, self.y), "right")
+        self.anim.render(screen, (self.x - camera.camerax, self.y - camera.cameray), "right")
 
     def update(self):
         self.anim.update()
