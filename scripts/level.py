@@ -19,6 +19,8 @@ def load_level():
     global world, map
     map = pytmx.load_pygame("tiled/world.tmx")
     world = utils.load_image("tiled/world.png", settings.level_scale)
+    settings.level_width = world.get_width()
+    settings.level_height = world.get_height()
     for x, y, gid in map.get_layer_by_name("ground"):
         if gid != 0:
             hard_blocks[(x, y)] = pygame.Rect((x * settings.tile_size, y * settings.tile_size, settings.tile_size, settings.tile_size))

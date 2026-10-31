@@ -7,3 +7,5 @@ gravity = 0.3
 screen_w = 0
 screen_h = 0
 camera_sensitivity = 15
+level_width = 0
+level_height = 0

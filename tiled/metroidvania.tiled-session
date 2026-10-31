@@ -19,10 +19,10 @@
         },
         "world.tmx": {
             "scale": 1,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 1442,
-                "y": 578.5
+                "x": 1251,
+                "y": 1532.5
             }
         }
     },
